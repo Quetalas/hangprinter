@@ -23,20 +23,20 @@
 /**
  * Configuration.h
  *
- * Basic settings such as:
+ * Basic settings such as:              // Базовые настройки
  *
- * - Type of electronics
- * - Type of temperature sensor
- * - Printer geometry
- * - Endstop configuration
- * - LCD controller
- * - Extra features
+ * - Type of electronics     //- Тип электроники
+ * - Type of temperature sensor //Тип датчика температуры
+ * - Printer geometry             // Геометрическая конфигурация
+ * - Endstop configuration          //   Конечная конфигурация(конфигурация концевиков)
+ * - LCD controller            //   ЖК - контроллер
+ * - Extra features                //    Дополнительные особенности
  *
  * Advanced settings can be found in Configuration_adv.h
  *
  */
 #include "RoboPrintConfig.h"
-
+ 
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
 #define CONFIGURATION_H_VERSION 010107
@@ -46,6 +46,9 @@
 // User-specified version info of this build to display in [Pronterface, etc] terminal window during
 // startup. Implementation of an idea by Prof Braino to inform user that any changes made to this
 // build by the user have been successfully uploaded into firmware.
+// Указанная пользователем информация о версии этой сборки для отображения в окне терминала [Pronterface, etc] во время
+// запускать. Реализация идеи проф Брайно, чтобы информировать пользователя о любых изменениях в этом
+// сборка пользователем успешно загружена в прошивку.
 #define STRING_CONFIG_H_AUTHOR "(none, default config)" // Who made the changes.
 #define SHOW_BOOTSCREEN
 #define STRING_SPLASH_LINE1 SHORT_BUILD_VERSION // will be shown during bootup in line 1
@@ -275,6 +278,7 @@
 #define MAX_REDUNDANT_TEMP_SENSOR_DIFF 10
 
 // Extruder temperature must be close to target for this long before M109 returns success
+// Температура экструдера должна быть близка к заданной в течение этого задолго до того, как M109 вернет успех
 #define TEMP_RESIDENCY_TIME 10  // (seconds)
 #define TEMP_HYSTERESIS 3       // (degC) range of +/- temperatures considered "close" to the target one
 #define TEMP_WINDOW     1       // (degC) Window around target to start the residency timer x degC early.
@@ -380,12 +384,12 @@
 // It also enables the M302 command to set the minimum extrusion temperature
 // or to allow moving the extruder regardless of the hotend temperature.
 // *** IT IS HIGHLY RECOMMENDED TO LEAVE THIS OPTION ENABLED! ***
-#define PREVENT_COLD_EXTRUSION
+//#define PREVENT_COLD_EXTRUSION
 #define EXTRUDE_MINTEMP 170
 
 // This option prevents a single extrusion longer than EXTRUDE_MAXLENGTH.
 // Note that for Bowden Extruders a too-small value here may prevent loading.
-#define PREVENT_LENGTHY_EXTRUDE
+//#define PREVENT_LENGTHY_EXTRUDE
 #define EXTRUDE_MAXLENGTH 200
 
 //===========================================================================
@@ -416,6 +420,8 @@
 
 // Uncomment one of these options to enable CoreXY, CoreXZ, or CoreYZ kinematics
 // either in the usual order or reversed
+// Раскомментируйте один из этих параметров для включения кинематики CoreXY, CoreXZ или CoreYZ
+// либо в обычном порядке, либо в обратном порядке
 //#define COREXY
 //#define COREXZ
 //#define COREYZ
@@ -424,18 +430,21 @@
 //#define COREZY
 
 // This value is used whether if LINE_BUILDUP_COMPENSATION_FEATURE is enabled or not.
-#define DEFAULT_E_AXIS_STEPS_PER_UNIT 410.0 // 410.0 set quite at random
+#define DEFAULT_E_AXIS_STEPS_PER_UNIT 10.0 // 410.0 set quite at random
 
 //===========================================================================
 //============================== Hangprinter Settings =======================
 //===========================================================================
 // Enable HANGPRINTER kinematics and most of the default configuration for Hangprinters
+// Включаем кинематику HANGPRINTER и большую часть конфигурации по умолчанию для Hangprinters
 #define HANGPRINTER
 #if ENABLED(HANGPRINTER)
   #define KINEMATIC_SEGMENTS_PER_SECOND 40
   #define HANGPRINTER_PRINTABLE_RADIUS 1500.0
   // Anchor position coordinates
   // ANCHOR_A_X = 0 by definition. Left out of all calculations
+  // Координаты якорной позиции
+  // ANCHOR_A_X = 0 по определению. Осталось из всех расчетов
   #define ANCHOR_A_Y -2163
   #define ANCHOR_A_Z   -75
   #define ANCHOR_B_X -1841
@@ -448,7 +457,9 @@
 
   // Comment this out if you plan to place your anchors at unconventional places
   // See SanityCheck.h for exact definition of the tested convention
-  #define CONVENTIONAL_GEOMETRY
+  // Закомментируйте это, если вы планируете разместить свои якоря в нетрадиционных местах
+  // Смотрите SanityCheck.h для точного определения протестированного соглашения
+  //#define CONVENTIONAL_GEOMETRY
 
   /*
    * Line buildup compensation feature
@@ -465,13 +476,29 @@
    * G6 S2 A2000
    * Note that this requires UNREGISTERED_MOVE_SUPPORT,
    * and that your printer will be confused about where it is after a G6 move
-   */
-  #define LINE_BUILDUP_COMPENSATION_FEATURE
+    
+   * Функция компенсации нарастания линии
+    * Для документирования теории см .:
+    * https://vitana.se/opr3d/tbear/2017.html#hangprinter_project_29
+    *
+    * Позволяет использовать больше информации о ваших линиях и катушках для повышения точности и объема печати.
+    * Величина D-компенсации на высоте 3 м составляет ~ 75 мм для установки линии 0,5 мм.
+    * Если вы планируете печатать> 2 м, вы обязательно должны включить это
+    * и убедитесь, что ваши моторы вращаются / раскручиваются близко к точному количеству.
+    *
+    * Проверьте, поставив принтер в исходное положение и перемотайте / раскрутите, используя
+    * G6 S2 A2000
+    * Обратите внимание, что для этого требуется UNRidual_MOVE_SUPPORT,
+    * и что ваш принтер будет сбит с толку о том, где он находится после переезда G6
+    */
+  //#define LINE_BUILDUP_COMPENSATION_FEATURE
   #if ENABLED(LINE_BUILDUP_COMPENSATION_FEATURE)
     // Allows gearing down with pulley principle
+    // Позволяет переключиться по принципу шкива
     #define MECHANICAL_ADVANTAGE { 1, 1, 1, 1 }
 
     // The point where line meets mover is called action point
+    // Точка, где линия встречается с двигателем, называется точкой действия
     #define ACTION_POINTS { 2, 2, 2, 3 }
 
     /* Naive buildup factor calculation (assumes cylindrical, straight line)
@@ -481,24 +508,37 @@
      *
      * Default buildup factor for 0.50 mm FireLine: 0.0078
      * Default buildup factor for 0.39 mm FireLine: 0.00475
-     * In practice you might want to compensate a bit more or a bit less */
-    #define SPOOL_BUILDUP_FACTOR 0.0078
+     * In practice you might want to compensate a bit more or a bit less 
+     * Расчет наивного коэффициента наращивания (предполагается цилиндрический, прямой)
+      * диаметр линии: 0,5 мм
+      * высота шпули: 8,0 мм
+      * (line_cross_section_area) / (высота * пи): ((0,5 / 2) * (0,5 / 2) * пи) / (8,0 * пи) = 0,0078 мм
+      *
+      * Коэффициент наращивания по умолчанию для 0,50 мм FireLine: 0,0078
+      * Коэффициент наращивания по умолчанию для 0,39 мм FireLine: 0,00475
+      * На практике вы можете компенсировать чуть больше или чуть меньше */
+    //#define SPOOL_BUILDUP_FACTOR 0.0078 //Закоментировали чтобы убедиться что сюда не заходим
 
     /* Total length of lines on each spool
      * Default assumes all nine lines are cut to length 7500 mm.
-     * Change to whatever length you have cut your different lines to. */
-    #define MOUNTED_LINE { 7500.0, 7500.0, 7500.0, 4000.0 }
+     * Change to whatever length you have cut your different lines to. 
+     Общая длина линий на каждой катушке
+      * По умолчанию предполагается, что все девять линий обрезаются до длины 7500 мм.
+      * Измените на любую длину, до которой вы обрезали свои линии*/
+    #define MOUNTED_LINE { 7500.0, 7500.0, 7500.0, 7500.0 }
 
     // Measuring your spool radii and adjusting this number will improve your Hangprinter's precision
-    #define SPOOL_RADII { 55.0, 55.0, 55.0, 55.0 }
+    // Измерение радиусов катушки и корректировка этого числа улучшат точность вашего Hangprinter
+    #define SPOOL_RADII { 55.0, 55.0, 55.0, 55.0}
 
     // Used for calculating steps per spool radian and the static steps per mm used in acceleration planning
-    #define MOTOR_GEAR_TEETH { 10, 10, 10, 10 }
+    // Используется для расчета шагов на радиан катушки и статических шагов на мм, используемых при планировании ускорения
+    #define MOTOR_GEAR_TEETH { 90, 90, 90, 90 }
     #define SPOOL_GEAR_TEETH { 100, 100, 100, 100 }
   #endif // LINE_BUILDUP_COMPENSATION_FEATURE
 #endif // HANGPRINTER
 
-// Activete G6: Direct Stepper Move
+// Activete G6: Direct Stepper Move Активировать G6: прямое шаговое движение
 // Super useful when Hangprinting
 #define UNREGISTERED_MOVE_SUPPORT
 
@@ -536,6 +576,39 @@
  * Takes line buildup into account if LINE_BUILDUP_COMPENSATION_FEATURE is enabled,
  *   but the compensation will be imperfect if configured anchor positions are imperfect
  *   or if the machine was not at the origin with tight lines when the previous G96 was issued.
+  * == Режим крутящего момента: G95 [A B C D] ==
+ * Устанавливает Mechaduino-управляемый и i2c-подключенный Mechaduino в режим крутящего момента.
+ * Параметры: A, B, C и D, каждый с аргументом + - [1-254] для указания величины крутящего момента.
+ * Аргумент 0 является специальным и переводит двигатель обратно в режим положения.
+ *
+ * Изменение знака аргумента меняет направление крутящего момента.
+ * Положительный знак или отсутствие знака должны сужать линию намоткой внутрь на катушку.
+ *
+ * Если несколько двигателей одновременно находятся в режиме крутящего момента, двигатель можно перемещать вручную.
+ * Это полезно при ручном нахождении (размещение сопла в исходной точке и стягивание линий).
+ *
+ * Попробуйте, например:
+ * G95 A40 B40 C40 D30
+ * Теперь двигайте до тех пор, пока сопло не будет в исходном положении.
+ * Затем вернитесь в режим положения:
+ * G95 A0 B0 C0 D0
+ * Восстановить правильные ходы G0 / G1
+ * G92 X0 Y0 Z0
+ *
+ * Ваш Hangprinter будет сбит с толку тем, где он находится во время / после G95.
+ * Это причина для G92 в приведенном выше примере.
+ *
+ * == Отметить контрольную точку: G96 [A B C D] ==
+ * Говорит Mechaduino прочитать значение кодера и запомнить его.
+ * Это положение датчика будет использоваться в качестве опорной точки при выдаче M114 S1 позже.
+ * Если задан один или несколько параметров [A B C D], то только эти оси отмечают свои контрольные точки.
+ *
+ * == Получить длину строки от датчика: M114 S1 ==
+ * Спрашивает всех Mechaduinos, сколько энкодеров повернулось с момента последнего G96.
+ * Использует эти данные, чтобы вычислить, сколько линий было намотано или нет.
+ * Принимает во внимание построение линии, если включена LINE_BUILDUP_COMPENSATION_FEATURE,
+ * но компенсация будет несовершенной, если настроенные якорные позиции несовершенны
+ * или если машина не была в начале координат с узкими линиями, когда был выпущен предыдущий G96.
  */
 #define MECHADUINO_I2C_COMMANDS
 
@@ -548,6 +621,9 @@
 // Specify here all the endstop connectors that are connected to any endstop or probe.
 // Almost all printers will be using one per axis. Probes will use one or more of the
 // extra connectors. Leave undefined any used for non-endstop and non-probe purposes.
+// Укажите здесь все концевые соединители, которые подключены к любому оконечному устройству или датчику.
+// Почти все принтеры будут использовать по одному на ось. Зонды будут использовать один или несколько
+// дополнительные разъемы. Оставьте неопределенным любой используемый для неконцевых и не зондирующих целей.
 //#define USE_XMIN_PLUG
 //#define USE_YMIN_PLUG
 //#define USE_ZMIN_PLUG // a Z probe
@@ -555,11 +631,12 @@
 //#define USE_YMAX_PLUG
 //#define USE_ZMAX_PLUG
 
-// coarse Endstop Settings
+// coarse Endstop Settings    грубые настройки Endstop
 #define ENDSTOPPULLUPS // Comment this out (using // at the start of the line) to disable the endstop pullup resistors
-
+//Закомментируйте это (используя // в начале строки), чтобы отключить нагрузочные резисторы на конце.
 #if DISABLED(ENDSTOPPULLUPS)
   // fine endstop settings: Individual pullups. will be ignored if ENDSTOPPULLUPS is defined
+  // точные настройки конечной остановки: отдельные подтягивания. будет игнорироваться, если определен ENDSTOPPULLUPS
   //#define ENDSTOPPULLUP_XMAX
   //#define ENDSTOPPULLUP_YMAX
   //#define ENDSTOPPULLUP_ZMAX
@@ -570,7 +647,9 @@
 #endif
 
 // Mechanical endstop with COM to ground and NC to Signal uses "false" here (most common setup).
+// Механическая конечная остановка с COM на землю и NC на Сигнал использует здесь «false» (наиболее распространенная установка).
 #define X_MIN_ENDSTOP_INVERTING true  // set to true to invert the logic of the endstop.
+// установить значение true, чтобы инвертировать логику конечной остановки.
 #define Y_MIN_ENDSTOP_INVERTING true  // set to true to invert the logic of the endstop.
 #define Z_MIN_ENDSTOP_INVERTING true  // set to true to invert the logic of the endstop.
 #define X_MAX_ENDSTOP_INVERTING true  // set to true to invert the logic of the endstop.
@@ -581,6 +660,9 @@
 // Enable this feature if all enabled endstop pins are interrupt-capable.
 // This will remove the need to poll the interrupt pins, saving many CPU cycles.
 //#define ENDSTOP_INTERRUPTS_FEATURE
+// Включите эту функцию, если все включенные выводы конечной остановки поддерживают прерывания.
+// Это избавит от необходимости опрашивать контакты прерывания, сохраняя много циклов ЦП.
+// # define ENDSTOP_INTERRUPTS_FEATURE
 
 //=============================================================================
 //============================== Movement Settings ============================
@@ -589,17 +671,19 @@
 
 // delta speeds must be the same on xyz
 /**
- * Default Settings
+ * Default Settings   * Настройки по умолчанию
  *
- * These settings can be reset by M502
+ * These settings can be reset by M502  * Эти настройки можно сбросить с помощью M502
  *
  * Note that if EEPROM is enabled, saved values will override these.
+  * Обратите внимание, что если EEPROM включен, сохраненные значения переопределяют их.
  */
 
 /**
- * With this option each E stepper can have its own factors for the
- * following movement settings. If fewer factors are given than the
- * total number of extruders, the last value applies to the rest.
+ * With this option each E stepper can have its own factors for the following movement settings.
+ * If fewer factors are given than the total number of extruders, the last value applies to the rest.
+ * Если указано меньше факторов, чем общее количество экструдеров, последнее значение относится к остальным.
+ * 
  */
 //#define DISTINCT_E_FACTORS
 
@@ -608,20 +692,31 @@
  * Override with M92
  * LINE_BUILDUP_COMPENSATION_FEATURE overrides ABCD values
  *                                           A       B       C       D
- */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 92.599, 92.599, 92.599, 92.599, DEFAULT_E_AXIS_STEPS_PER_UNIT }
+ / **
+  * Стандартные шаги оси на единицу (шагов / мм)
+  * Переопределить с M92
+  * LINE_BUILDUP_COMPENSATION_FEATURE переопределяет значения ABCD
+  * A B C D
+ */
+#define DEFAULT_AXIS_STEPS_PER_UNIT   { 10, 10, 10, 10, DEFAULT_E_AXIS_STEPS_PER_UNIT }
 
 /**
  * Default Max Feed Rate (mm/s)
  * Override with M203
  *                                        A    B    C    D   E
+ * Максимальная скорость подачи по умолчанию (мм / с)
+ * Переопределить с M203
+ * A B C D E
  */
-#define DEFAULT_MAX_FEEDRATE          { 500, 500, 500, 300, 25 }
+#define DEFAULT_MAX_FEEDRATE          { 40, 40, 40, 40, 25 } // Отвечает за максимальную скоость движения кареток
 
 /**
  * Default Max Acceleration (change/s) change = mm/s
  * (Maximum start speed for accelerated moves)
  * Override with M201
+ * Макс. Ускорение (изменение / с) по умолчанию = мм / с
+ * (Максимальная начальная скорость для ускоренных ходов)
+ * Переопределить с M201
  *                                         A     B     C      D     E
  */
 #define DEFAULT_MAX_ACCELERATION      { 1000, 1000, 1000, 1000, 10000 }
@@ -633,10 +728,16 @@
  *   M204 P    Acceleration
  *   M204 R    Retract Acceleration
  *   M204 T    Travel Acceleration
- */
-#define DEFAULT_ACCELERATION          900    // X, Y, Z and E acceleration for printing moves
+ * Ускорение (изменение / с) по умолчанию = мм / с
+ * Переопределить с M204
+ *
+ * M204 P Ускорение
+ * M204 R ускорение втягивания
+ * M204 T Ускорение путешествия
+ */
+#define DEFAULT_ACCELERATION          10    // X, Y, Z and E acceleration for printing moves
 #define DEFAULT_RETRACT_ACCELERATION  3000    // E acceleration for retracts
-#define DEFAULT_TRAVEL_ACCELERATION   900    // X, Y, Z acceleration for travel (non printing) moves
+#define DEFAULT_TRAVEL_ACCELERATION   10    // X, Y, Z acceleration for travel (non printing) moves
 
 /**
  * Default Jerk (mm/s)
@@ -645,6 +746,12 @@
  * "Jerk" specifies the minimum speed change that requires acceleration.
  * When changing speed and direction, if the difference is less than the
  * value set here, it may happen instantaneously.
+ * Рывок по умолчанию (мм / с)
+ * Переопределить с M205 X Y Z E
+ *
+ * «Рывок» указывает минимальное изменение скорости, которое требует ускорения.
+ * При изменении скорости и направления, если разница меньше, чем
+ * значение установлено здесь, это может произойти мгновенно.
  */
 #define DEFAULT_AJERK                 13.0
 #define DEFAULT_BJERK                 13.0
@@ -1439,7 +1546,7 @@
  *
  * :{ 'en':'English', 'an':'Aragonese', 'bg':'Bulgarian', 'ca':'Catalan', 'cn':'Chinese', 'cz':'Czech', 'cz_utf8':'Czech (UTF8)', 'de':'German', 'el':'Greek', 'el-gr':'Greek (Greece)', 'es':'Spanish', 'eu':'Basque-Euskera', 'fi':'Finnish', 'fr':'French', 'fr_utf8':'French (UTF8)', 'gl':'Galician', 'hr':'Croatian', 'it':'Italian', 'kana':'Japanese', 'kana_utf8':'Japanese (UTF8)', 'nl':'Dutch', 'pl':'Polish', 'pt':'Portuguese', 'pt-br':'Portuguese (Brazilian)', 'pt-br_utf8':'Portuguese (Brazilian UTF8)', 'pt_utf8':'Portuguese (UTF8)', 'ru':'Russian', 'sk_utf8':'Slovak (UTF8)', 'tr':'Turkish', 'uk':'Ukrainian', 'zh_CN':'Chinese (Simplified)', 'zh_TW':'Chinese (Taiwan)', test':'TEST' }
  */
-#define LCD_LANGUAGE en
+#define LCD_LANGUAGE ru
 
 /**
  * LCD Character Set
@@ -1485,7 +1592,7 @@
  * you must uncomment the following option or it won't work.
  *
  */
-//#define SDSUPPORT
+#define SDSUPPORT
 
 /**
  * SD CARD: SPI SPEED
@@ -1637,7 +1744,7 @@
 // RepRapDiscount FULL GRAPHIC Smart Controller
 // http://reprap.org/wiki/RepRapDiscount_Full_Graphic_Smart_Controller
 //
-//#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
+#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
 
 //
 // MakerLab Mini Panel with graphic

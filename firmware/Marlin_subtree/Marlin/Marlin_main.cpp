@@ -13288,6 +13288,7 @@ void ok_to_send() {
   void recalc_hangprinter_settings(){
     HANGPRINTER_IK_ORIGIN(line_lengths_origin);
     #if ENABLED(LINE_BUILDUP_COMPENSATION_FEATURE)
+	  MYSERIAL0.println("!!!!!!!!!!!!LINE_BUILDUP_COMPENSATION_FEATURE!!!!!!!!!!!!!");
       const uint8_t mech_adv_tmp[MOV_AXIS] = MECHANICAL_ADVANTAGE,
                     actn_pts_tmp[MOV_AXIS] = ACTION_POINTS;
       const uint16_t m_g_t_tmp[MOV_AXIS]   = MOTOR_GEAR_TEETH,
