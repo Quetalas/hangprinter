@@ -35,6 +35,8 @@
  * Advanced settings can be found in Configuration_adv.h
  *
  */
+#include "RoboPrintConfig.h"
+
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
 #define CONFIGURATION_H_VERSION 010107

@@ -412,19 +412,18 @@ void report_current_position();
 
   void recalc_hangprinter_settings();
 
-  #define HANGPRINTER_IK(V) do {                             \
-    line_lengths[A_AXIS] = sqrt(sq(anchor_A_z - V[Z_AXIS])   \
-                              + sq(anchor_A_y - V[Y_AXIS])   \
-                              + sq(             V[X_AXIS])); \
-    line_lengths[B_AXIS] = sqrt(sq(anchor_B_z - V[Z_AXIS])   \
-                              + sq(anchor_B_y - V[Y_AXIS])   \
-                              + sq(anchor_B_x - V[X_AXIS])); \
-    line_lengths[C_AXIS] = sqrt(sq(anchor_C_z - V[Z_AXIS])   \
-                              + sq(anchor_C_y - V[Y_AXIS])   \
-                              + sq(anchor_C_x - V[X_AXIS])); \
-    line_lengths[D_AXIS] = sqrt(sq(             V[X_AXIS])   \
-                              + sq(             V[Y_AXIS])   \
-                              + sq(anchor_D_z - V[Z_AXIS])); \
+  #define HANGPRINTER_IK(V) do {    \
+    /*Есть максимамальные значения, на которые может опуститься/подняться платформа*/  \
+    float z = V[Z_AXIS];            \
+    if(V[Z_AXIS] < TOWER_MIN_Z) {         \
+      z = TOWER_MIN_Z;  \
+    } else if(V[Z_AXIS] > TOWER_MAX_Z) {  \
+      z = TOWER_MAX_Z;                    \
+    }                               \
+    line_lengths[A_AXIS] = -1.0*(V[X_AXIS] + PLATFORM_LENGTH_HALF - sqrt(sq(TOWER_FOOT_LENGTH) - sq(PLATFORM_WIDTH_HALF + V[Y_AXIS]) - sq(z))); \
+    line_lengths[B_AXIS] = 1.0*(-V[X_AXIS] + PLATFORM_LENGTH_HALF - sqrt(sq(TOWER_FOOT_LENGTH) - sq(PLATFORM_WIDTH_HALF + V[Y_AXIS]) - sq(z))); \
+    line_lengths[C_AXIS] = 1.0*(-V[X_AXIS] + PLATFORM_LENGTH_HALF - sqrt(sq(TOWER_FOOT_LENGTH) - sq(PLATFORM_WIDTH_HALF - V[Y_AXIS]) - sq(z))); \
+    line_lengths[D_AXIS] = 1.0*(V[X_AXIS] + PLATFORM_LENGTH_HALF - sqrt(sq(TOWER_FOOT_LENGTH) - sq(PLATFORM_WIDTH_HALF - V[Y_AXIS]) - sq(z))); \
   }while(0)
 
   // Inverse kinematics at origin
