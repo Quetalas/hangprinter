@@ -4055,7 +4055,6 @@ inline void gcode_G4() {
   inline void home_hangprinter() {
     SERIAL_ECHOLNPGM("Warning: G28 is not implemented for Hangprinter.");
   }
-
 #endif// DELTA
 
 #ifdef Z_AFTER_PROBING
@@ -4204,7 +4203,11 @@ inline void gcode_G28(const bool always_home_all) {
     UNUSED(always_home_all);
 
   #elif ENABLED(HANGPRINTER)
-    home_hangprinter();
+	#if ENABLED(SPIDERPRINTER)
+		home_spiderprinter();		
+	#elif
+		home_hangprinter();
+	#endif
     UNUSED(always_home_all);
     UNUSED(homeaxis); // function
   #else
